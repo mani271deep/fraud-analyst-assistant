@@ -1,0 +1,28 @@
+# Data
+data/
+*.csv
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+*.egg-info/
+
+# Environment / secrets
+.env
+*.env
+error_trace.txt
+
+# Model artifacts (optional — see note below)
+# backend/model/
+
+# Node / frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

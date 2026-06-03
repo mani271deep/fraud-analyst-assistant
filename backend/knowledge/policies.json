@@ -1,0 +1,42 @@
+[
+  {
+    "id": "POL-001",
+    "text": "Flag transactions that are far above the customer's typical transaction amount, especially when the merchant is unfamiliar."
+  },
+  {
+    "id": "POL-002",
+    "text": "Treat rapid transactions in different cities or countries as high risk because they may indicate card testing or account takeover."
+  },
+  {
+    "id": "POL-003",
+    "text": "Review unusual time-of-day activity when a customer suddenly transacts during hours that differ from their normal pattern."
+  },
+  {
+    "id": "POL-004",
+    "text": "Escalate first-time high-value transactions to a new merchant when there is no prior customer relationship with that merchant."
+  },
+  {
+    "id": "POL-005",
+    "text": "Flag sudden spikes in transaction frequency, especially many small purchases within a short time window."
+  },
+  {
+    "id": "POL-006",
+    "text": "Review repeated declined attempts followed by an approved purchase because this can indicate credential stuffing or limit probing."
+  },
+  {
+    "id": "POL-007",
+    "text": "Treat purchases from high-risk merchant categories as suspicious when they differ from the customer's historical spending behavior."
+  },
+  {
+    "id": "POL-008",
+    "text": "Flag transactions where the billing location, shipping location, and device location are inconsistent with the customer's profile."
+  },
+  {
+    "id": "POL-009",
+    "text": "Review new-device transactions when the device has no trusted history and the transaction amount is unusually large."
+  },
+  {
+    "id": "POL-010",
+    "text": "Escalate transactions that combine multiple weak fraud signals, such as a new merchant, unusual hour, high amount, and unfamiliar location."
+  }
+]

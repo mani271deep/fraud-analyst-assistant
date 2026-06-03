@@ -8,6 +8,7 @@ from typing import Any, Optional
 import numpy as np
 import pandas as pd
 import shap
+import xgboost as xgb
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from xgboost import DMatrix, XGBClassifier
@@ -59,7 +60,7 @@ def to_plain_float(value: Any, name: str) -> float:
 
 
 @lru_cache(maxsize=1)
-def load_artifacts() -> tuple[XGBClassifier, list[str], Optional[shap.TreeExplainer]]:
+def load_artifacts() -> tuple[xgb.Booster, list[str], Optional[shap.TreeExplainer]]:
     missing_paths = [
         str(path)
         for path in (MODEL_PATH, FEATURES_PATH)
@@ -73,9 +74,8 @@ def load_artifacts() -> tuple[XGBClassifier, list[str], Optional[shap.TreeExplai
         )
 
     feature_columns = json.loads(FEATURES_PATH.read_text(encoding="utf-8"))
-    model = XGBClassifier()
-    model._estimator_type = "classifier"
-    model.load_model(MODEL_PATH)
+    model = xgb.Booster()
+    model.load_model(str(MODEL_PATH))
     try:
         explainer = shap.TreeExplainer(model)
     except ValueError as exc:
@@ -123,17 +123,16 @@ def build_transaction_frame(
 
 
 def get_fraud_shap_values(
-    model: XGBClassifier,
+    model: xgb.Booster,
     explainer: Optional[shap.TreeExplainer],
     transaction_frame: pd.DataFrame,
 ) -> np.ndarray:
     if explainer is None:
-        booster = model.get_booster()
         dmatrix = DMatrix(
             transaction_frame,
             feature_names=list(transaction_frame.columns),
         )
-        shap_values = booster.predict(dmatrix, pred_contribs=True)
+        shap_values = model.predict(dmatrix, pred_contribs=True)
     else:
         shap_values = explainer.shap_values(transaction_frame)
 
@@ -164,8 +163,9 @@ def score_transaction(transaction: dict[str, Any]) -> dict[str, Any]:
 
     transaction_frame = build_transaction_frame(transaction, feature_columns)
 
+    dmatrix = xgb.DMatrix(transaction_frame)
     fraud_probability = to_plain_float(
-        model.predict_proba(transaction_frame)[0, 1],
+        model.predict(dmatrix)[0],
         "fraud_probability",
     )
     shap_values = get_fraud_shap_values(model, explainer, transaction_frame)

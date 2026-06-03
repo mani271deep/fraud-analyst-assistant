@@ -74,6 +74,7 @@ def load_artifacts() -> tuple[XGBClassifier, list[str], Optional[shap.TreeExplai
 
     feature_columns = json.loads(FEATURES_PATH.read_text(encoding="utf-8"))
     model = XGBClassifier()
+    model._estimator_type = "classifier"
     model.load_model(MODEL_PATH)
     try:
         explainer = shap.TreeExplainer(model)

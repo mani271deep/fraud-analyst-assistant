@@ -1,8 +1,11 @@
-pandas
-scikit-learn
-xgboost
+cat > requirements.txt << 'EOF'
 fastapi
-uvicorn
+uvicorn[standard]
+xgboost==2.1.4
+scikit-learn
+pandas
+numpy
 shap
 faiss-cpu
 openai
+EOF

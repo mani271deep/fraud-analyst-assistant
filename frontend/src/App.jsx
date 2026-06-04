@@ -1,7 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 
-const API_URL = 'http://127.0.0.1:8000/investigate'
+const API_BASE =
+  import.meta.env.VITE_API_URL ||
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://127.0.0.1:8000'
+    : 'https://fraud-analyst-assistant.onrender.com')
 
 function probabilityTone(probability) {
   if (probability > 0.7) return 'danger'
@@ -88,7 +92,7 @@ function App() {
       setError('')
 
       try {
-        const response = await fetch(API_URL, {
+        const response = await fetch(`${API_BASE}/investigate`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(selectedAlert.transaction),
